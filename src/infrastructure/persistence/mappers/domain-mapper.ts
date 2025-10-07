@@ -79,8 +79,8 @@ export class RestaurantMapper {
       description: entity.descripcion ?? undefined,
       address: entity.direccion,
       openingHours: entity.horarioAtencion ?? undefined,
-    capacity: entity.capacidadTotal,
-    image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      capacity: entity.capacidadTotal,
+      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -156,8 +156,8 @@ export class TableMapper {
       positionX: entity.posX,
       positionY: entity.posY,
       width: entity.ancho,
-    height: entity.alto,
-    image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      height: entity.alto,
+      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -256,7 +256,7 @@ export class ReservationMapper {
       id: entity.id,
       user: UserMapper.toDomain(entity.usuario),
       restaurant: RestaurantMapper.toDomain(entity.restaurante),
-  table: TableMapper.toDomain(entity.mesa!),
+      table: TableMapper.toDomain(entity.mesa!),
       reservationDate: new Date(entity.fechaReserva),
       reservationTime: entity.hora,
       guestCount: entity.cantidadPersonas,
@@ -276,7 +276,7 @@ export class ReservationMapper {
     entity.id = domain.id;
     entity.usuario = UserMapper.toOrm(domain.user);
     entity.restaurante = RestaurantMapper.toOrm(domain.restaurant);
-  entity.mesa = TableMapper.toOrm(domain.table);
+    entity.mesa = TableMapper.toOrm(domain.table);
     entity.fechaReserva = domain.reservationDate.toISOString().slice(0, 10);
     entity.hora = domain.reservationTime;
     entity.cantidadPersonas = domain.guestCount;
