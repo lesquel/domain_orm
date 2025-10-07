@@ -1,8 +1,9 @@
 export function bootstrap(): void {
-  // Placeholder bootstrap logic for the ORM domain project.
   console.log('ORM domain project bootstrapped successfully.');
 }
 
-if (import.meta.main) {
+declare const require: any;
+
+if (typeof require !== 'undefined' && require.main === module) {
   bootstrap();
 }
