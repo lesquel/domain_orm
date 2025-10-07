@@ -80,7 +80,7 @@ export class RestaurantMapper {
       address: entity.direccion,
       openingHours: entity.horarioAtencion ?? undefined,
       capacity: entity.capacidadTotal,
-  image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -157,7 +157,7 @@ export class TableMapper {
       positionY: entity.posY,
       width: entity.ancho,
       height: entity.alto,
-  image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -221,7 +221,7 @@ export class LayoutObjectMapper {
       positionY: entity.posY,
       width: entity.ancho,
       height: entity.alto,
-  image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -340,7 +340,10 @@ export class ReviewMapper {
 }
 
 export class SubscriptionPlanMapper {
-  static toDomain(entity: SubscriptionPlanOrmEntity, options: MapperOptions = {}): SubscriptionPlan {
+  static toDomain(
+    entity: SubscriptionPlanOrmEntity,
+    options: MapperOptions = {},
+  ): SubscriptionPlan {
     const config = { ...DEFAULT_OPTIONS, ...options };
     const domain: SubscriptionPlan = {
       id: entity.id,
@@ -418,7 +421,9 @@ export class MenuMapper {
     };
 
     if (config.depth === 'basic') {
-      domain.dishes = entity.platillos?.map((platillo) => DishMapper.toDomain(platillo, { depth: 'none' }));
+      domain.dishes = entity.platillos?.map((platillo) =>
+        DishMapper.toDomain(platillo, { depth: 'none' }),
+      );
     }
 
     return domain;
@@ -445,7 +450,7 @@ export class DishMapper {
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
       price: Number(entity.precio),
-  image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     return domain;
