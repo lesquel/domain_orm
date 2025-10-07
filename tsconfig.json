@@ -10,6 +10,7 @@
     "target": "ES2020",
     "module": "commonjs",
     "types": ["node"],
+<<<<<<< HEAD
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -17,4 +18,11 @@
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
+=======
+    "sourceMap": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+
+>>>>>>> 6b8284a101e8878f7a20995d89476145373a3252
 }
