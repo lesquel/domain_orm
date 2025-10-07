@@ -26,4 +26,4 @@ bun install
 bun run dev
 ```
 
-¡Disfruta construyendo tu dominio! 
+¡Disfruta construyendo tu dominio!
