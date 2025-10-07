@@ -14,7 +14,7 @@ export class ImageOrmEntity {
   url!: string;
 
   @Column({ length: 50, nullable: true })
-  titulo?: string;
+  titulo?: string | null;
 
   @Column({ type: 'text', nullable: true })
   descripcion?: string | null;

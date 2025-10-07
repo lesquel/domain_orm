@@ -20,18 +20,18 @@ export class UserOrmEntity {
   @Column({ length: 15 })
   telefono!: string;
 
-  @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.user)
+  @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.usuario)
   reservas!: ReservationOrmEntity[];
 
-  @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.user)
+  @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.usuario)
   pagos!: PaymentOrmEntity[];
 
   @OneToMany(
     () => SubscriptionOrmEntity,
-    (subscription: SubscriptionOrmEntity) => subscription.user,
+    (subscription: SubscriptionOrmEntity) => subscription.usuario,
   )
   suscripciones!: SubscriptionOrmEntity[];
 
-  @OneToMany(() => ReviewOrmEntity, (review: ReviewOrmEntity) => review.user)
+  @OneToMany(() => ReviewOrmEntity, (review: ReviewOrmEntity) => review.usuario)
   resenas!: ReviewOrmEntity[];
 }
