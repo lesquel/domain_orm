@@ -1,0 +1,40 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
+import { UserOrmEntity } from './user.orm-entity.js';
+
+@Entity({ name: 'resena' })
+export class ReviewOrmEntity {
+  @PrimaryGeneratedColumn('uuid', { name: 'resena_id' })
+  id!: string;
+
+  @ManyToOne(() => UserOrmEntity, (user: UserOrmEntity) => user.resenas, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'usuario_id' })
+  usuario!: UserOrmEntity;
+
+  @ManyToOne(
+    () => RestaurantOrmEntity,
+    (restaurant: RestaurantOrmEntity) => restaurant.resenas,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({ name: 'restaurante_id' })
+  restaurante!: RestaurantOrmEntity;
+
+  @Column({ type: 'int' })
+  rating!: number;
+
+  @Column({ type: 'text', nullable: true })
+  comentario?: string | null;
+
+  @CreateDateColumn({ name: 'fecha_creacion' })
+  fechaCreacion!: Date;
+}

@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 import { PaymentOrmEntity } from './payment.orm-entity.js';
 import { ReservationOrmEntity } from './reservation.orm-entity.js';
@@ -26,10 +20,7 @@ export class UserOrmEntity {
   @Column({ length: 15 })
   telefono!: string;
 
-  @OneToMany(
-    () => ReservationOrmEntity,
-    (reservation: ReservationOrmEntity) => reservation.user,
-  )
+  @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.user)
   reservas!: ReservationOrmEntity[];
 
   @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.user)
