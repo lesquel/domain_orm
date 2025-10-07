@@ -23,10 +23,10 @@ export class ReservationOrmEntity {
   restaurante!: RestaurantOrmEntity;
 
   @ManyToOne(() => TableOrmEntity, (table: TableOrmEntity) => table.reservaciones, {
-    onDelete: 'SET NULL',
+    onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'mesa_id' })
-  mesa?: TableOrmEntity | null;
+  mesa!: TableOrmEntity;
 
   @Column({ name: 'fecha_reserva', type: 'date' })
   fechaReserva!: string;
