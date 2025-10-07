@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { DishOrmEntity } from './menu-item.orm-entity.js';
+import { DishOrmEntity } from './dish.orm-entity.js';
 import { LayoutObjectOrmEntity } from './layout-object.orm-entity.js';
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
 import { TableOrmEntity } from './table.orm-entity.js';

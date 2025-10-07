@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
 import { SubscriptionPlanOrmEntity } from './subscription-plan.orm-entity.js';
@@ -15,9 +9,13 @@ export class SubscriptionOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'suscripcion_id' })
   id!: string;
 
-  @ManyToOne(() => SubscriptionPlanOrmEntity, (plan: SubscriptionPlanOrmEntity) => plan.suscripciones, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(
+    () => SubscriptionPlanOrmEntity,
+    (plan: SubscriptionPlanOrmEntity) => plan.suscripciones,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   @JoinColumn({ name: 'plan_suscripcion_id' })
   plan!: SubscriptionPlanOrmEntity;
 

@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ImageOrmEntity } from './image.orm-entity.js';
 import { MenuOrmEntity } from './menu.orm-entity.js';
@@ -15,7 +9,7 @@ export class DishOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'platillo_id' })
   id!: string;
 
-  @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.menus, {
+  @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.platillos, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })

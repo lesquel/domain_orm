@@ -1,12 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+import { DishOrmEntity } from './dish.orm-entity.js';
 import { ImageOrmEntity } from './image.orm-entity.js';
 import { MenuOrmEntity } from './menu.orm-entity.js';
 import { ReservationOrmEntity } from './reservation.orm-entity.js';
@@ -44,15 +38,24 @@ export class RestaurantOrmEntity {
   @OneToMany(() => SectionOrmEntity, (section: SectionOrmEntity) => section.restaurante)
   secciones!: SectionOrmEntity[];
 
-  @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.restaurante)
+  @OneToMany(
+    () => ReservationOrmEntity,
+    (reservation: ReservationOrmEntity) => reservation.restaurante,
+  )
   reservas!: ReservationOrmEntity[];
 
   @OneToMany(() => ReviewOrmEntity, (review: ReviewOrmEntity) => review.restaurante)
   resenas!: ReviewOrmEntity[];
 
-  @OneToMany(() => SubscriptionOrmEntity, (subscription: SubscriptionOrmEntity) => subscription.restaurante)
+  @OneToMany(
+    () => SubscriptionOrmEntity,
+    (subscription: SubscriptionOrmEntity) => subscription.restaurante,
+  )
   suscripciones!: SubscriptionOrmEntity[];
 
   @OneToMany(() => MenuOrmEntity, (menu: MenuOrmEntity) => menu.restaurante)
   menus!: MenuOrmEntity[];
+
+  @OneToMany(() => DishOrmEntity, (dish: DishOrmEntity) => dish.restaurante)
+  platillos!: DishOrmEntity[];
 }

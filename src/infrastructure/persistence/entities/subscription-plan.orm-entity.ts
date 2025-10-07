@@ -22,6 +22,9 @@ export class SubscriptionPlanOrmEntity {
   @Column({ length: 30 })
   estado!: string;
 
-  @OneToMany(() => SubscriptionOrmEntity, (subscription: SubscriptionOrmEntity) => subscription.plan)
+  @OneToMany(
+    () => SubscriptionOrmEntity,
+    (subscription: SubscriptionOrmEntity) => subscription.plan,
+  )
   suscripciones!: SubscriptionOrmEntity[];
 }

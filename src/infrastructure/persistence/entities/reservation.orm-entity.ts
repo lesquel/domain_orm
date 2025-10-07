@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { PaymentOrmEntity } from './payment.orm-entity.js';
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
@@ -23,11 +16,9 @@ export class ReservationOrmEntity {
   @JoinColumn({ name: 'usuario_id' })
   usuario!: UserOrmEntity;
 
-  @ManyToOne(
-    () => RestaurantOrmEntity,
-    (restaurant: RestaurantOrmEntity) => restaurant.reservas,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.reservas, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'restaurante_id' })
   restaurante!: RestaurantOrmEntity;
 

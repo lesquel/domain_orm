@@ -21,11 +21,9 @@ export class ReviewOrmEntity {
   @JoinColumn({ name: 'usuario_id' })
   usuario!: UserOrmEntity;
 
-  @ManyToOne(
-    () => RestaurantOrmEntity,
-    (restaurant: RestaurantOrmEntity) => restaurant.resenas,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.resenas, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'restaurante_id' })
   restaurante!: RestaurantOrmEntity;
 

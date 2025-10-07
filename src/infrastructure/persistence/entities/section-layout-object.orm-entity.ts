@@ -14,9 +14,13 @@ export class SectionLayoutObjectOrmEntity {
   @JoinColumn({ name: 'seccion_id' })
   seccion!: SectionOrmEntity;
 
-  @ManyToOne(() => LayoutObjectOrmEntity, (object: LayoutObjectOrmEntity) => object.seccionObjetos, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(
+    () => LayoutObjectOrmEntity,
+    (object: LayoutObjectOrmEntity) => object.seccionObjetos,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   @JoinColumn({ name: 'objeto_id' })
   objeto!: LayoutObjectOrmEntity;
 }
