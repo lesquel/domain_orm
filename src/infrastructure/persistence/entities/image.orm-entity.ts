@@ -10,19 +10,19 @@ export class ImageOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'imagen_id' })
   id!: string;
 
-  @Column({ length: 255 })
+  @Column('varchar', { length: 255 })
   url!: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column('varchar', { length: 50, nullable: true })
   titulo?: string | null;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   descripcion?: string | null;
 
-  @CreateDateColumn({ name: 'fecha_creacion' })
+  @CreateDateColumn({ name: 'fecha_creacion', type: 'datetime' })
   fechaCreacion!: Date;
 
-  @Column({ name: 'es_activa', default: true })
+  @Column('boolean', { name: 'es_activa', default: true })
   esActiva!: boolean;
 
   @OneToMany(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.imagen)

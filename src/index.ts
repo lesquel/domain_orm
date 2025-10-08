@@ -1,4 +1,6 @@
-import { AppDataSource } from './infrastructure/config/typeorm.config';
+import 'reflect-metadata';
+
+import { AppDataSource } from './infrastructure/config/typeorm.config.js';
 
 export async function bootstrap(): Promise<void> {
   try {

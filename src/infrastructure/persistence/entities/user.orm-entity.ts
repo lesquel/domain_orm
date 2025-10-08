@@ -11,13 +11,13 @@ export class UserOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'usuario_id' })
   id!: string;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   email!: string;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   nombres!: string;
 
-  @Column({ length: 15 })
+  @Column('varchar', { length: 15 })
   telefono!: string;
 
   @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.usuario)

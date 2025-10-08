@@ -21,13 +21,13 @@ export class DishOrmEntity {
   @JoinColumn({ name: 'menu_id' })
   menu!: MenuOrmEntity;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   nombre!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   descripcion?: string | null;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
   precio!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.platillos, {

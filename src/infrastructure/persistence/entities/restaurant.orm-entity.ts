@@ -13,19 +13,19 @@ export class RestaurantOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'restaurante_id' })
   id!: string;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   nombre!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   descripcion?: string | null;
 
-  @Column({ length: 200 })
+  @Column('varchar', { length: 200 })
   direccion!: string;
 
-  @Column({ name: 'horario_atencion', length: 100, nullable: true })
+  @Column('varchar', { name: 'horario_atencion', length: 100, nullable: true })
   horarioAtencion?: string | null;
 
-  @Column({ name: 'capacidad_total', type: 'int' })
+  @Column('int', { name: 'capacidad_total' })
   capacidadTotal!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.restaurantes, {

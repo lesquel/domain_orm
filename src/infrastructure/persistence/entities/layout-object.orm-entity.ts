@@ -8,22 +8,22 @@ export class LayoutObjectOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'objeto_id' })
   id!: string;
 
-  @Column({ length: 100, nullable: true })
+  @Column('varchar', { length: 100, nullable: true })
   nombre?: string | null;
 
-  @Column({ length: 50, nullable: true })
+  @Column('varchar', { length: 50, nullable: true })
   tipo?: string | null;
 
-  @Column({ name: 'pos_x', type: 'int' })
+  @Column('int', { name: 'pos_x' })
   posX!: number;
 
-  @Column({ name: 'pos_y', type: 'int' })
+  @Column('int', { name: 'pos_y' })
   posY!: number;
 
-  @Column({ name: 'ancho', type: 'int' })
+  @Column('int', { name: 'ancho' })
   ancho!: number;
 
-  @Column({ name: 'alto', type: 'int' })
+  @Column('int', { name: 'alto' })
   alto!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.objetos, {

@@ -7,19 +7,19 @@ export class SubscriptionPlanOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'plan_suscripcion_id' })
   id!: string;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   nombre!: string;
 
-  @Column({ length: 50 })
+  @Column('varchar', { length: 50 })
   tipo!: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
   precio!: number;
 
-  @Column({ length: 50 })
+  @Column('varchar', { length: 50 })
   periodo!: string;
 
-  @Column({ length: 30 })
+  @Column('varchar', { length: 30 })
   estado!: string;
 
   @OneToMany(

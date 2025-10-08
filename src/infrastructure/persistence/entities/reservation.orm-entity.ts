@@ -28,19 +28,19 @@ export class ReservationOrmEntity {
   @JoinColumn({ name: 'mesa_id' })
   mesa!: TableOrmEntity;
 
-  @Column({ name: 'fecha_reserva', type: 'date' })
+  @Column('date', { name: 'fecha_reserva' })
   fechaReserva!: string;
 
-  @Column({ type: 'time' })
+  @Column('time')
   hora!: string;
 
-  @Column({ name: 'cantidad_personas', type: 'int' })
+  @Column('int', { name: 'cantidad_personas' })
   cantidadPersonas!: number;
 
-  @Column({ length: 30 })
+  @Column('varchar', { length: 30 })
   estado!: string;
 
-  @Column({ type: 'varchar', length: 250, nullable: true })
+  @Column('varchar', { length: 250, nullable: true })
   notas?: string | null;
 
   @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.reserva)

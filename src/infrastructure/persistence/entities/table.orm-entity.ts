@@ -15,22 +15,22 @@ export class TableOrmEntity {
   @JoinColumn({ name: 'seccion_id' })
   seccion!: SectionOrmEntity;
 
-  @Column({ name: 'numero_mesa', type: 'int' })
+  @Column('int', { name: 'numero_mesa' })
   numeroMesa!: number;
 
-  @Column({ type: 'int' })
+  @Column('int')
   capacidad!: number;
 
-  @Column({ name: 'pos_x', type: 'int' })
+  @Column('int', { name: 'pos_x' })
   posX!: number;
 
-  @Column({ name: 'pos_y', type: 'int' })
+  @Column('int', { name: 'pos_y' })
   posY!: number;
 
-  @Column({ name: 'ancho', type: 'int' })
+  @Column('int', { name: 'ancho' })
   ancho!: number;
 
-  @Column({ name: 'alto', type: 'int' })
+  @Column('int', { name: 'alto' })
   alto!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.mesas, {

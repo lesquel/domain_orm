@@ -27,12 +27,12 @@ export class ReviewOrmEntity {
   @JoinColumn({ name: 'restaurante_id' })
   restaurante!: RestaurantOrmEntity;
 
-  @Column({ type: 'int' })
+  @Column('int')
   rating!: number;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   comentario?: string | null;
 
-  @CreateDateColumn({ name: 'fecha_creacion' })
+  @CreateDateColumn({ name: 'fecha_creacion', type: 'datetime' })
   fechaCreacion!: Date;
 }

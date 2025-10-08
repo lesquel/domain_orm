@@ -9,10 +9,10 @@ export class SectionOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'seccion_id' })
   id!: string;
 
-  @Column({ length: 80 })
+  @Column('varchar', { length: 80 })
   nombre!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   descripcion?: string | null;
 
   @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.secciones, {

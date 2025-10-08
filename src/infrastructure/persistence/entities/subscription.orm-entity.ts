@@ -33,12 +33,12 @@ export class SubscriptionOrmEntity {
   @JoinColumn({ name: 'restaurante_id' })
   restaurante!: RestaurantOrmEntity;
 
-  @Column({ name: 'fecha_inicio', type: 'date' })
+  @Column('date', { name: 'fecha_inicio' })
   fechaInicio!: string;
 
-  @Column({ name: 'fecha_fin', type: 'date', nullable: true })
+  @Column('date', { name: 'fecha_fin', nullable: true })
   fechaFin?: string | null;
 
-  @Column({ name: 'estado_suscripcion', length: 30 })
+  @Column('varchar', { name: 'estado_suscripcion', length: 30 })
   estado!: string;
 }

@@ -20,21 +20,21 @@ export class PaymentOrmEntity {
   @JoinColumn({ name: 'usuario_id' })
   usuario!: UserOrmEntity;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
   monto!: number;
 
-  @Column({ length: 3, default: 'USD' })
+  @Column('varchar', { length: 3, default: 'USD' })
   moneda!: string;
 
-  @Column({ length: 50 })
+  @Column('varchar', { length: 50 })
   metodo!: string;
 
-  @Column({ length: 30 })
+  @Column('varchar', { length: 30 })
   estado!: string;
 
-  @Column({ name: 'fecha_pago', type: 'datetime' })
+  @Column('datetime', { name: 'fecha_pago' })
   fechaPago!: Date;
 
-  @Column({ length: 120, nullable: true })
+  @Column('varchar', { length: 120, nullable: true })
   referencia?: string | null;
 }
