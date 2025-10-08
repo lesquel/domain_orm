@@ -126,7 +126,9 @@ export class SectionMapper {
     const config = { ...DEFAULT_OPTIONS, ...options };
     const restaurantDomain =
       options.restaurant ??
-      (entity.restaurante ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' }) : undefined);
+      (entity.restaurante
+        ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+        : undefined);
 
     if (!restaurantDomain) {
       throw new Error('SectionOrmEntity requires a restaurant relation to map to domain.');
