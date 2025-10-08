@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 
 import { AppDataSource } from './infrastructure/config/typeorm.config.js';
+import { EntityMetadata } from 'typeorm';
 
 export async function bootstrap(): Promise<void> {
   try {

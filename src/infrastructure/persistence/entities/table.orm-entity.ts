@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { ImageOrmEntity } from './image.orm-entity.js';
 import { ReservationOrmEntity } from './reservation.orm-entity.js';
@@ -13,7 +14,7 @@ export class TableOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'seccion_id' })
-  seccion!: SectionOrmEntity;
+  seccion!: Relation<SectionOrmEntity>;
 
   @Column('int', { name: 'numero_mesa' })
   numeroMesa!: number;
@@ -38,8 +39,8 @@ export class TableOrmEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'imagen_id' })
-  imagen?: ImageOrmEntity | null;
+  imagen?: Relation<ImageOrmEntity> | null;
 
   @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.mesa)
-  reservaciones!: ReservationOrmEntity[];
+  reservaciones!: Relation<ReservationOrmEntity[]>;
 }

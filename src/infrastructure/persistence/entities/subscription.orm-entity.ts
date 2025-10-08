@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
 import { SubscriptionPlanOrmEntity } from './subscription-plan.orm-entity.js';
@@ -17,13 +18,13 @@ export class SubscriptionOrmEntity {
     },
   )
   @JoinColumn({ name: 'plan_suscripcion_id' })
-  plan!: SubscriptionPlanOrmEntity;
+  plan!: Relation<SubscriptionPlanOrmEntity>;
 
   @ManyToOne(() => UserOrmEntity, (user: UserOrmEntity) => user.suscripciones, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'usuario_id' })
-  usuario!: UserOrmEntity;
+  usuario!: Relation<UserOrmEntity>;
 
   @ManyToOne(
     () => RestaurantOrmEntity,
@@ -31,7 +32,7 @@ export class SubscriptionOrmEntity {
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @Column('date', { name: 'fecha_inicio' })
   fechaInicio!: string;

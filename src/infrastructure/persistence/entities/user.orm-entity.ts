@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { PaymentOrmEntity } from './payment.orm-entity.js';
 import { ReservationOrmEntity } from './reservation.orm-entity.js';
@@ -21,17 +22,17 @@ export class UserOrmEntity {
   telefono!: string;
 
   @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.usuario)
-  reservas!: ReservationOrmEntity[];
+  reservas!: Relation<ReservationOrmEntity[]>;
 
   @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.usuario)
-  pagos!: PaymentOrmEntity[];
+  pagos!: Relation<PaymentOrmEntity[]>;
 
   @OneToMany(
     () => SubscriptionOrmEntity,
     (subscription: SubscriptionOrmEntity) => subscription.usuario,
   )
-  suscripciones!: SubscriptionOrmEntity[];
+  suscripciones!: Relation<SubscriptionOrmEntity[]>;
 
   @OneToMany(() => ReviewOrmEntity, (review: ReviewOrmEntity) => review.usuario)
-  resenas!: ReviewOrmEntity[];
+  resenas!: Relation<ReviewOrmEntity[]>;
 }

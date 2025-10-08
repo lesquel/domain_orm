@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { PaymentOrmEntity } from './payment.orm-entity.js';
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
@@ -14,19 +15,19 @@ export class ReservationOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'usuario_id' })
-  usuario!: UserOrmEntity;
+  usuario!: Relation<UserOrmEntity>;
 
   @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.reservas, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @ManyToOne(() => TableOrmEntity, (table: TableOrmEntity) => table.reservaciones, {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'mesa_id' })
-  mesa!: TableOrmEntity;
+  mesa!: Relation<TableOrmEntity>;
 
   @Column('date', { name: 'fecha_reserva' })
   fechaReserva!: string;
@@ -44,5 +45,5 @@ export class ReservationOrmEntity {
   notas?: string | null;
 
   @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.reserva)
-  pagos!: PaymentOrmEntity[];
+  pagos!: Relation<PaymentOrmEntity[]>;
 }

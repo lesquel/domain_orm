@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { ReservationOrmEntity } from './reservation.orm-entity.js';
 import { UserOrmEntity } from './user.orm-entity.js';
@@ -12,13 +13,13 @@ export class PaymentOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'reserva_id' })
-  reserva!: ReservationOrmEntity;
+  reserva!: Relation<ReservationOrmEntity>;
 
   @ManyToOne(() => UserOrmEntity, (user: UserOrmEntity) => user.pagos, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'usuario_id' })
-  usuario!: UserOrmEntity;
+  usuario!: Relation<UserOrmEntity>;
 
   @Column('decimal', { precision: 10, scale: 2 })
   monto!: number;

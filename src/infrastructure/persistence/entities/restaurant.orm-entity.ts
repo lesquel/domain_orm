@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { DishOrmEntity } from './dish.orm-entity.js';
 import { ImageOrmEntity } from './image.orm-entity.js';
@@ -33,29 +34,29 @@ export class RestaurantOrmEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'imagen_id' })
-  imagen?: ImageOrmEntity | null;
+  imagen?: Relation<ImageOrmEntity> | null;
 
   @OneToMany(() => SectionOrmEntity, (section: SectionOrmEntity) => section.restaurante)
-  secciones!: SectionOrmEntity[];
+  secciones!: Relation<SectionOrmEntity[]>;
 
   @OneToMany(
     () => ReservationOrmEntity,
     (reservation: ReservationOrmEntity) => reservation.restaurante,
   )
-  reservas!: ReservationOrmEntity[];
+  reservas!: Relation<ReservationOrmEntity[]>;
 
   @OneToMany(() => ReviewOrmEntity, (review: ReviewOrmEntity) => review.restaurante)
-  resenas!: ReviewOrmEntity[];
+  resenas!: Relation<ReviewOrmEntity[]>;
 
   @OneToMany(
     () => SubscriptionOrmEntity,
     (subscription: SubscriptionOrmEntity) => subscription.restaurante,
   )
-  suscripciones!: SubscriptionOrmEntity[];
+  suscripciones!: Relation<SubscriptionOrmEntity[]>;
 
   @OneToMany(() => MenuOrmEntity, (menu: MenuOrmEntity) => menu.restaurante)
-  menus!: MenuOrmEntity[];
+  menus!: Relation<MenuOrmEntity[]>;
 
   @OneToMany(() => DishOrmEntity, (dish: DishOrmEntity) => dish.restaurante)
-  platillos!: DishOrmEntity[];
+  platillos!: Relation<DishOrmEntity[]>;
 }

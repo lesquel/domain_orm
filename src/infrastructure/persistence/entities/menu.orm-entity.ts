@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { DishOrmEntity } from './dish.orm-entity.js';
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
@@ -12,7 +13,7 @@ export class MenuOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @Column('varchar', { length: 100 })
   nombre!: string;
@@ -27,5 +28,5 @@ export class MenuOrmEntity {
   fotoUrl?: string | null;
 
   @OneToMany(() => DishOrmEntity, (dish: DishOrmEntity) => dish.menu)
-  platillos!: DishOrmEntity[];
+  platillos!: Relation<DishOrmEntity[]>;
 }

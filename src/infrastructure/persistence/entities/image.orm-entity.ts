@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { DishOrmEntity } from './dish.orm-entity.js';
 import { LayoutObjectOrmEntity } from './layout-object.orm-entity.js';
@@ -26,17 +27,17 @@ export class ImageOrmEntity {
   esActiva!: boolean;
 
   @OneToMany(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.imagen)
-  restaurantes!: RestaurantOrmEntity[];
+  restaurantes!: Relation<RestaurantOrmEntity[]>;
 
   @OneToMany(() => TableOrmEntity, (table: TableOrmEntity) => table.imagen)
-  mesas!: TableOrmEntity[];
+  mesas!: Relation<TableOrmEntity[]>;
 
   @OneToMany(
     () => LayoutObjectOrmEntity,
     (layoutObject: LayoutObjectOrmEntity) => layoutObject.imagen,
   )
-  objetos!: LayoutObjectOrmEntity[];
+  objetos!: Relation<LayoutObjectOrmEntity[]>;
 
   @OneToMany(() => DishOrmEntity, (dish: DishOrmEntity) => dish.imagen)
-  platillos!: DishOrmEntity[];
+  platillos!: Relation<DishOrmEntity[]>;
 }

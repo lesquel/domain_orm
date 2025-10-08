@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
 import { UserOrmEntity } from './user.orm-entity.js';
@@ -19,13 +20,13 @@ export class ReviewOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'usuario_id' })
-  usuario!: UserOrmEntity;
+  usuario!: Relation<UserOrmEntity>;
 
   @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.resenas, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @Column('int')
   rating!: number;

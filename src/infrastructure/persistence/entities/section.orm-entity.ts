@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
 import { SectionLayoutObjectOrmEntity } from './section-layout-object.orm-entity.js';
@@ -19,15 +20,15 @@ export class SectionOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @OneToMany(() => TableOrmEntity, (table: TableOrmEntity) => table.seccion)
-  mesas!: TableOrmEntity[];
+  mesas!: Relation<TableOrmEntity[]>;
 
   @OneToMany(
     () => SectionLayoutObjectOrmEntity,
     (sectionObject: SectionLayoutObjectOrmEntity) => sectionObject.seccion,
     { cascade: true },
   )
-  seccionObjetos!: SectionLayoutObjectOrmEntity[];
+  seccionObjetos!: Relation<SectionLayoutObjectOrmEntity[]>;
 }

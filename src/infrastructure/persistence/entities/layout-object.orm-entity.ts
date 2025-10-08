@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { ImageOrmEntity } from './image.orm-entity.js';
 import { SectionLayoutObjectOrmEntity } from './section-layout-object.orm-entity.js';
@@ -31,11 +32,11 @@ export class LayoutObjectOrmEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'imagen_id' })
-  imagen?: ImageOrmEntity | null;
+  imagen?: Relation<ImageOrmEntity> | null;
 
   @OneToMany(
     () => SectionLayoutObjectOrmEntity,
     (sectionObject: SectionLayoutObjectOrmEntity) => sectionObject.objeto,
   )
-  seccionObjetos!: SectionLayoutObjectOrmEntity[];
+  seccionObjetos!: Relation<SectionLayoutObjectOrmEntity[]>;
 }

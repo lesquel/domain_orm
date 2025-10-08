@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { SubscriptionOrmEntity } from './subscription.orm-entity.js';
 
@@ -26,5 +27,5 @@ export class SubscriptionPlanOrmEntity {
     () => SubscriptionOrmEntity,
     (subscription: SubscriptionOrmEntity) => subscription.plan,
   )
-  suscripciones!: SubscriptionOrmEntity[];
+  suscripciones!: Relation<SubscriptionOrmEntity[]>;
 }
