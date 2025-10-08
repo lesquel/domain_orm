@@ -4,6 +4,7 @@
     "dev": "bunx tsx watch src/index.ts",
     "build": "bunx tsc --project tsconfig.json",
     "start": "node dist/index.js",
+    "seed": "bunx tsx src/infrastructure/persistence/seed/seed.ts",
     "lint": "bunx eslint .",
     "lint:fix": "bunx eslint . --fix",
     "format": "bunx prettier --write .",
