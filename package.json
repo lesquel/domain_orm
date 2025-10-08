@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "bunx tsx watch src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "build": "bunx tsc --project tsconfig.json",
     "start": "node dist/index.js",
     "seed": "tsx src/infrastructure/persistence/seed/seed.ts",

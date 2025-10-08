@@ -80,7 +80,9 @@ export class RestaurantMapper {
       address: entity.direccion,
       openingHours: entity.horarioAtencion ?? undefined,
       capacity: entity.capacidadTotal,
-      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      // Solo intentar mapear la imagen si está cargada (no undefined)
+      image:
+        entity.imagen !== undefined && entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -118,9 +120,22 @@ export class RestaurantMapper {
 export class SectionMapper {
   static toDomain(entity: SectionOrmEntity, options: MapperOptions = {}): Section {
     const config = { ...DEFAULT_OPTIONS, ...options };
+
+    // Si restaurante no está cargado, crear un objeto mínimo
+    // Esto sucede cuando las secciones se cargan como parte de un restaurante
+    const restaurant = entity.restaurante
+      ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+      : ({
+          id: '', // Se llenará desde el contexto superior si es necesario
+          name: '',
+          address: '',
+          capacity: 0,
+          image: null,
+        } as Restaurant);
+
     const domain: Section = {
       id: entity.id,
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
+      restaurant,
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
     };
@@ -148,16 +163,27 @@ export class SectionMapper {
 export class TableMapper {
   static toDomain(entity: TableOrmEntity, options: MapperOptions = {}): DiningTable {
     const config = { ...DEFAULT_OPTIONS, ...options };
+
+    // Si section no está cargada, crear un objeto mínimo
+    const section = entity.seccion
+      ? SectionMapper.toDomain(entity.seccion, { depth: 'none' })
+      : ({
+          id: '',
+          restaurant: { id: '', name: '', address: '', capacity: 0, image: null } as Restaurant,
+          name: '',
+        } as Section);
+
     const domain: DiningTable = {
       id: entity.id,
-      section: SectionMapper.toDomain(entity.seccion),
+      section,
       tableNumber: entity.numeroMesa,
       capacity: entity.capacidad,
       positionX: entity.posX,
       positionY: entity.posY,
       width: entity.ancho,
       height: entity.alto,
-      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      image:
+        entity.imagen !== undefined && entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     if (config.depth === 'basic') {
@@ -252,11 +278,50 @@ export class LayoutObjectMapper {
 export class ReservationMapper {
   static toDomain(entity: ReservationOrmEntity, options: MapperOptions = {}): Reservation {
     const config = { ...DEFAULT_OPTIONS, ...options };
+
+    // Proteger contra relaciones no cargadas
+    const user = entity.usuario
+      ? UserMapper.toDomain(entity.usuario, { depth: 'none' })
+      : ({
+          id: '',
+          email: '',
+          names: '',
+          phone: '',
+        } as User);
+
+    const restaurant = entity.restaurante
+      ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+      : ({
+          id: '',
+          name: '',
+          address: '',
+          capacity: 0,
+          image: null,
+        } as Restaurant);
+
+    const table = entity.mesa
+      ? TableMapper.toDomain(entity.mesa, { depth: 'none' })
+      : ({
+          id: '',
+          section: {
+            id: '',
+            restaurant: { id: '', name: '', address: '', capacity: 0, image: null } as Restaurant,
+            name: '',
+          } as Section,
+          tableNumber: 0,
+          capacity: 0,
+          positionX: 0,
+          positionY: 0,
+          width: 0,
+          height: 0,
+          image: null,
+        } as DiningTable);
+
     const domain: Reservation = {
       id: entity.id,
-      user: UserMapper.toDomain(entity.usuario),
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
-      table: TableMapper.toDomain(entity.mesa!),
+      user,
+      restaurant,
+      table,
       reservationDate: new Date(entity.fechaReserva),
       reservationTime: entity.hora,
       guestCount: entity.cantidadPersonas,
@@ -288,10 +353,47 @@ export class ReservationMapper {
 
 export class PaymentMapper {
   static toDomain(entity: PaymentOrmEntity): Payment {
+    // Proteger contra relaciones no cargadas
+    const reservation = entity.reserva
+      ? ReservationMapper.toDomain(entity.reserva, { depth: 'none' })
+      : ({
+          id: '',
+          user: { id: '', email: '', names: '', phone: '' } as User,
+          restaurant: { id: '', name: '', address: '', capacity: 0, image: null } as Restaurant,
+          table: {
+            id: '',
+            section: {
+              id: '',
+              restaurant: { id: '', name: '', address: '', capacity: 0, image: null } as Restaurant,
+              name: '',
+            } as Section,
+            tableNumber: 0,
+            capacity: 0,
+            positionX: 0,
+            positionY: 0,
+            width: 0,
+            height: 0,
+            image: null,
+          } as DiningTable,
+          reservationDate: new Date(),
+          reservationTime: '',
+          guestCount: 0,
+          status: 'PENDING' as const,
+        } as Reservation);
+
+    const user = entity.usuario
+      ? UserMapper.toDomain(entity.usuario, { depth: 'none' })
+      : ({
+          id: '',
+          email: '',
+          names: '',
+          phone: '',
+        } as User);
+
     return {
       id: entity.id,
-      reservation: ReservationMapper.toDomain(entity.reserva),
-      user: UserMapper.toDomain(entity.usuario),
+      reservation,
+      user,
       amount: Number(entity.monto),
       currency: entity.moneda,
       method: entity.metodo as Payment['method'],
@@ -318,10 +420,30 @@ export class PaymentMapper {
 
 export class ReviewMapper {
   static toDomain(entity: ReviewOrmEntity): Review {
+    // Proteger contra relaciones no cargadas
+    const user = entity.usuario
+      ? UserMapper.toDomain(entity.usuario, { depth: 'none' })
+      : ({
+          id: '',
+          email: '',
+          names: '',
+          phone: '',
+        } as User);
+
+    const restaurant = entity.restaurante
+      ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+      : ({
+          id: '',
+          name: '',
+          address: '',
+          capacity: 0,
+          image: null,
+        } as Restaurant);
+
     return {
       id: entity.id,
-      user: UserMapper.toDomain(entity.usuario),
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
+      user,
+      restaurant,
       rating: entity.rating,
       comment: entity.comentario ?? undefined,
       createdAt: entity.fechaCreacion,
@@ -378,11 +500,43 @@ export class SubscriptionPlanMapper {
 export class SubscriptionMapper {
   static toDomain(entity: SubscriptionOrmEntity, options: MapperOptions = {}): Subscription {
     const config = { ...DEFAULT_OPTIONS, ...options };
+
+    // Proteger contra relaciones no cargadas
+    const user = entity.usuario
+      ? UserMapper.toDomain(entity.usuario, { depth: 'none' })
+      : ({
+          id: '',
+          email: '',
+          names: '',
+          phone: '',
+        } as User);
+
+    const restaurant = entity.restaurante
+      ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+      : ({
+          id: '',
+          name: '',
+          address: '',
+          capacity: 0,
+          image: null,
+        } as Restaurant);
+
+    const plan = entity.plan
+      ? SubscriptionPlanMapper.toDomain(entity.plan)
+      : ({
+          id: '',
+          name: '',
+          tier: 'BASIC' as const,
+          price: 0,
+          billingCycle: 'MONTHLY' as const,
+          status: 'ACTIVE' as const,
+        } as SubscriptionPlan);
+
     const domain: Subscription = {
       id: entity.id,
-      user: UserMapper.toDomain(entity.usuario),
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
-      plan: SubscriptionPlanMapper.toDomain(entity.plan),
+      user,
+      restaurant,
+      plan,
       startsOn: new Date(entity.fechaInicio),
       endsOn: entity.fechaFin ? new Date(entity.fechaFin) : null,
       status: entity.estado as Subscription['status'],
@@ -411,9 +565,21 @@ export class SubscriptionMapper {
 export class MenuMapper {
   static toDomain(entity: MenuOrmEntity, options: MapperOptions = {}): Menu {
     const config = { ...DEFAULT_OPTIONS, ...options };
+
+    // Si restaurante no está cargado, crear un objeto mínimo
+    const restaurant = entity.restaurante
+      ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+      : ({
+          id: '',
+          name: '',
+          address: '',
+          capacity: 0,
+          image: null,
+        } as Restaurant);
+
     const domain: Menu = {
       id: entity.id,
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
+      restaurant,
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
       price: entity.precio ? Number(entity.precio) : undefined,
@@ -443,14 +609,34 @@ export class MenuMapper {
 
 export class DishMapper {
   static toDomain(entity: DishOrmEntity, _options: MapperOptions = {}): Dish {
+    // Si restaurante o menu no están cargados, crear objetos mínimos
+    const restaurant = entity.restaurante
+      ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+      : ({
+          id: '',
+          name: '',
+          address: '',
+          capacity: 0,
+          image: null,
+        } as Restaurant);
+
+    const menu = entity.menu
+      ? MenuMapper.toDomain(entity.menu, { depth: 'none' })
+      : ({
+          id: '',
+          restaurant: { id: '', name: '', address: '', capacity: 0, image: null } as Restaurant,
+          name: '',
+        } as Menu);
+
     const domain: Dish = {
       id: entity.id,
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
-      menu: MenuMapper.toDomain(entity.menu),
+      restaurant,
+      menu,
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
       price: Number(entity.precio),
-      image: entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
+      image:
+        entity.imagen !== undefined && entity.imagen ? ImageMapper.toDomain(entity.imagen) : null,
     };
 
     return domain;
