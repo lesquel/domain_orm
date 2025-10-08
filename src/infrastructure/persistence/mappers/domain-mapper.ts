@@ -48,7 +48,7 @@ export class UserMapper {
 
     if (config.depth === 'basic') {
       domain.reservations = entity.reservas?.map((reserva) =>
-        ReservationMapper.toDomain(reserva, { depth: 'none' }),
+        ReservationMapper.toDomain(reserva, { depth: 'none', restaurant: domain }),
       );
       domain.payments = entity.pagos?.map((pago) => PaymentMapper.toDomain(pago));
       domain.subscriptions = entity.suscripciones?.map((suscripcion) =>
@@ -206,7 +206,11 @@ export class TableMapper {
 
     if (config.depth === 'basic') {
       domain.reservations = entity.reservaciones?.map((reserva) =>
-        ReservationMapper.toDomain(reserva, { depth: 'none' }),
+        ReservationMapper.toDomain(reserva, {
+          depth: 'none',
+          restaurant: sectionDomain.restaurant,
+          table: domain,
+        }),
       );
     }
 
@@ -293,14 +297,41 @@ export class LayoutObjectMapper {
   }
 }
 
+interface ReservationMapperOptions extends MapperOptions {
+  restaurant?: Restaurant;
+  table?: DiningTable;
+}
+
 export class ReservationMapper {
-  static toDomain(entity: ReservationOrmEntity, options: MapperOptions = {}): Reservation {
+  static toDomain(
+    entity: ReservationOrmEntity,
+    options: ReservationMapperOptions = {},
+  ): Reservation {
     const config = { ...DEFAULT_OPTIONS, ...options };
-    const restaurantDomain = RestaurantMapper.toDomain(entity.restaurante);
-    const tableDomain = TableMapper.toDomain(entity.mesa, {
-      depth: 'none',
-      restaurant: restaurantDomain,
-    });
+    const restaurantDomain =
+      options.restaurant ??
+      (entity.restaurante
+        ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+        : entity.mesa?.seccion?.restaurante
+        ? RestaurantMapper.toDomain(entity.mesa.seccion.restaurante, { depth: 'none' })
+        : undefined);
+
+    if (!restaurantDomain) {
+      throw new Error('ReservationOrmEntity requires a restaurant relation to map to domain.');
+    }
+
+    const tableDomain =
+      options.table ??
+      (entity.mesa
+        ? TableMapper.toDomain(entity.mesa, {
+            depth: 'none',
+            restaurant: restaurantDomain,
+          })
+        : undefined);
+
+    if (!tableDomain) {
+      throw new Error('ReservationOrmEntity requires a table relation to map to domain.');
+    }
     const domain: Reservation = {
       id: entity.id,
       user: UserMapper.toDomain(entity.usuario),
