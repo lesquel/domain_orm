@@ -24,7 +24,7 @@ const defaultDatabasePath = join(process.cwd(), 'orm-domain.sqlite');
 export const AppDataSource = new DataSource({
   type: 'sqlite',
   database: process.env.DB_PATH ?? defaultDatabasePath,
-  synchronize: false,
+  synchronize: true,
   logging: process.env.TYPEORM_LOGGING === 'true',
   entities: [
     UserOrmEntity,

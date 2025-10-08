@@ -85,7 +85,7 @@ export class RestaurantMapper {
 
     if (config.depth === 'basic') {
       domain.sections = entity.secciones?.map((section) =>
-        SectionMapper.toDomain(section, { depth: 'none' }),
+        SectionMapper.toDomain(section, { depth: 'none', restaurant: domain }),
       );
       domain.reservations = entity.reservas?.map((reserva) =>
         ReservationMapper.toDomain(reserva, { depth: 'none' }),
@@ -94,7 +94,9 @@ export class RestaurantMapper {
       domain.subscriptions = entity.suscripciones?.map((suscripcion) =>
         SubscriptionMapper.toDomain(suscripcion, { depth: 'none' }),
       );
-      domain.menus = entity.menus?.map((menu) => MenuMapper.toDomain(menu, { depth: 'none' }));
+      domain.menus = entity.menus?.map((menu) =>
+        MenuMapper.toDomain(menu, { depth: 'none', restaurant: domain }),
+      );
     }
 
     return domain;
@@ -115,21 +117,39 @@ export class RestaurantMapper {
   }
 }
 
+interface SectionMapperOptions extends MapperOptions {
+  restaurant?: Restaurant;
+}
+
 export class SectionMapper {
-  static toDomain(entity: SectionOrmEntity, options: MapperOptions = {}): Section {
+  static toDomain(entity: SectionOrmEntity, options: SectionMapperOptions = {}): Section {
     const config = { ...DEFAULT_OPTIONS, ...options };
+    const restaurantDomain =
+      options.restaurant ??
+      (entity.restaurante ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' }) : undefined);
+
+    if (!restaurantDomain) {
+      throw new Error('SectionOrmEntity requires a restaurant relation to map to domain.');
+    }
+
     const domain: Section = {
       id: entity.id,
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
+      restaurant: restaurantDomain,
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
     };
 
     if (config.depth === 'basic') {
-      domain.tables = entity.mesas?.map((mesa) => TableMapper.toDomain(mesa, { depth: 'none' }));
-      domain.layoutObjects = entity.seccionObjetos?.map((sectionObject) =>
-        LayoutObjectMapper.toDomain(sectionObject.objeto, { depth: 'none' }),
+      domain.tables = entity.mesas?.map((mesa) =>
+        TableMapper.toDomain(mesa, { depth: 'none', section: domain }),
       );
+      domain.layoutObjects = entity.seccionObjetos
+        ?.map((sectionObject) =>
+          sectionObject.objeto
+            ? LayoutObjectMapper.toDomain(sectionObject.objeto, { depth: 'none' })
+            : undefined,
+        )
+        .filter((obj): obj is LayoutObject => obj !== undefined);
     }
 
     return domain;
@@ -145,12 +165,34 @@ export class SectionMapper {
   }
 }
 
+interface TableMapperOptions extends MapperOptions {
+  section?: Section;
+  restaurant?: Restaurant;
+}
+
 export class TableMapper {
-  static toDomain(entity: TableOrmEntity, options: MapperOptions = {}): DiningTable {
+  static toDomain(entity: TableOrmEntity, options: TableMapperOptions = {}): DiningTable {
     const config = { ...DEFAULT_OPTIONS, ...options };
+    const sectionDomain =
+      options.section ??
+      (entity.seccion
+        ? SectionMapper.toDomain(entity.seccion, {
+            depth: 'none',
+            restaurant:
+              options.restaurant ??
+              (entity.seccion.restaurante
+                ? RestaurantMapper.toDomain(entity.seccion.restaurante, { depth: 'none' })
+                : undefined),
+          })
+        : undefined);
+
+    if (!sectionDomain) {
+      throw new Error('TableOrmEntity requires a section relation to map to domain.');
+    }
+
     const domain: DiningTable = {
       id: entity.id,
-      section: SectionMapper.toDomain(entity.seccion),
+      section: sectionDomain,
       tableNumber: entity.numeroMesa,
       capacity: entity.capacidad,
       positionX: entity.posX,
@@ -252,11 +294,16 @@ export class LayoutObjectMapper {
 export class ReservationMapper {
   static toDomain(entity: ReservationOrmEntity, options: MapperOptions = {}): Reservation {
     const config = { ...DEFAULT_OPTIONS, ...options };
+    const restaurantDomain = RestaurantMapper.toDomain(entity.restaurante);
+    const tableDomain = TableMapper.toDomain(entity.mesa, {
+      depth: 'none',
+      restaurant: restaurantDomain,
+    });
     const domain: Reservation = {
       id: entity.id,
       user: UserMapper.toDomain(entity.usuario),
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
-      table: TableMapper.toDomain(entity.mesa!),
+      restaurant: restaurantDomain,
+      table: tableDomain,
       reservationDate: new Date(entity.fechaReserva),
       reservationTime: entity.hora,
       guestCount: entity.cantidadPersonas,
@@ -408,12 +455,26 @@ export class SubscriptionMapper {
   }
 }
 
+interface MenuMapperOptions extends MapperOptions {
+  restaurant?: Restaurant;
+}
+
 export class MenuMapper {
-  static toDomain(entity: MenuOrmEntity, options: MapperOptions = {}): Menu {
+  static toDomain(entity: MenuOrmEntity, options: MenuMapperOptions = {}): Menu {
     const config = { ...DEFAULT_OPTIONS, ...options };
+    const restaurantDomain =
+      options.restaurant ??
+      (entity.restaurante
+        ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+        : undefined);
+
+    if (!restaurantDomain) {
+      throw new Error('MenuOrmEntity requires a restaurant relation to map to domain.');
+    }
+
     const domain: Menu = {
       id: entity.id,
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
+      restaurant: restaurantDomain,
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
       price: entity.precio ? Number(entity.precio) : undefined,
@@ -422,7 +483,11 @@ export class MenuMapper {
 
     if (config.depth === 'basic') {
       domain.dishes = entity.platillos?.map((platillo) =>
-        DishMapper.toDomain(platillo, { depth: 'none' }),
+        DishMapper.toDomain(platillo, {
+          depth: 'none',
+          menu: domain,
+          restaurant: restaurantDomain,
+        }),
       );
     }
 
@@ -441,12 +506,37 @@ export class MenuMapper {
   }
 }
 
+interface DishMapperOptions extends MapperOptions {
+  restaurant?: Restaurant;
+  menu?: Menu;
+}
+
 export class DishMapper {
-  static toDomain(entity: DishOrmEntity, _options: MapperOptions = {}): Dish {
+  static toDomain(entity: DishOrmEntity, options: DishMapperOptions = {}): Dish {
+    const restaurantDomain =
+      options.restaurant ??
+      (entity.restaurante
+        ? RestaurantMapper.toDomain(entity.restaurante, { depth: 'none' })
+        : undefined);
+
+    if (!restaurantDomain) {
+      throw new Error('DishOrmEntity requires a restaurant relation to map to domain.');
+    }
+
+    const menuDomain =
+      options.menu ??
+      (entity.menu
+        ? MenuMapper.toDomain(entity.menu, { depth: 'none', restaurant: restaurantDomain })
+        : undefined);
+
+    if (!menuDomain) {
+      throw new Error('DishOrmEntity requires a menu relation to map to domain.');
+    }
+
     const domain: Dish = {
       id: entity.id,
-      restaurant: RestaurantMapper.toDomain(entity.restaurante),
-      menu: MenuMapper.toDomain(entity.menu),
+      restaurant: restaurantDomain,
+      menu: menuDomain,
       name: entity.nombre,
       description: entity.descripcion ?? undefined,
       price: Number(entity.precio),

@@ -9,7 +9,7 @@ export class TypeOrmTableRepository
   extends TypeOrmBaseRepository<DiningTable, TableOrmEntity>
   implements TableRepository
 {
-  protected relations = ['seccion', 'imagen', 'reservaciones'];
+  protected relations = ['seccion', 'seccion.restaurante', 'imagen', 'reservaciones'];
 
   constructor() {
     super(
