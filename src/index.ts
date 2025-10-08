@@ -1,10 +1,11 @@
-import { AppDataSource } from './infrastructure/config/typeorm.config';
+import { AppDataSource } from './infrastructure/config/typeorm.config.js';
+import type { EntityMetadata } from 'typeorm';
 
 export async function bootstrap(): Promise<void> {
   try {
     const dataSource = await AppDataSource.initialize();
     console.log('Data source initialized with the following entities:');
-    dataSource.entityMetadatas.forEach((metadata) => {
+    dataSource.entityMetadatas.forEach((metadata: EntityMetadata) => {
       console.log(`- ${metadata.name} (table: ${metadata.tableName})`);
     });
   } catch (error) {
@@ -13,6 +14,4 @@ export async function bootstrap(): Promise<void> {
   }
 }
 
-if (import.meta.main) {
-  bootstrap().catch(() => process.exit(1));
-}
+bootstrap().catch(() => process.exit(1));
