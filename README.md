@@ -1,6 +1,6 @@
 # ORM Domain Project
 
-Proyecto base en TypeScript para practicar conceptos de dominio y ORM.
+Proyecto base en TypeScript que modela el diagrama entidad–relación del sistema de reservas de restaurantes usando **TypeORM** dentro de una arquitectura limpia (dominio independiente, capa de infraestructura y mapeadores explícitos).
 
 ## Scripts disponibles
 
@@ -13,11 +13,18 @@ Proyecto base en TypeScript para practicar conceptos de dominio y ORM.
 - `bun run format:check` – Verifica el formato sin modificar archivos.
 - `bun run check` – Revisa los tipos sin generar archivos.
 
+## Modelo de datos
+
+- Entidades de dominio puras en `src/domain/entities`.
+- Entidades de persistencia de TypeORM en `src/infrastructure/persistence/entities` que reflejan el DER proporcionado (usuarios, restaurantes, secciones, mesas, reservas, pagos, suscripciones, etc.).
+- Mapeadores bidireccionales en `src/infrastructure/persistence/mappers/domain-mapper.ts` para traducir entre el dominio y la infraestructura sin acoplar capas.
+- Configuración del `DataSource` en `src/infrastructure/config/typeorm.config.ts`, lista para SQLite (archivo local configurable con `DB_PATH`).
+
 ## Configuración
 
-- `tsconfig.json` define la salida a `dist/` y reglas estrictas de TypeScript.
+- `tsconfig.json` está listo para ESM con `NodeNext`, metadatos de decoradores y verificaciones estrictas.
 - `eslint.config.mjs` habilita reglas recomendadas de TypeScript y ajustes mínimos.
-- `.prettierrc.json` centraliza el estilo de formato.
+- Prettier se ejecuta con la configuración por defecto del proyecto.
 
 ## Primeros pasos
 
@@ -25,5 +32,14 @@ Proyecto base en TypeScript para practicar conceptos de dominio y ORM.
 bun install
 bun run dev
 ```
+
+### Inicializar la base de datos y verificar entidades
+
+```powershell
+bun run build
+bun run start
+```
+
+El script de arranque inicializa la conexión SQLite y lista las entidades registradas. Modifica `DB_PATH` si deseas apuntar a otra base (por ejemplo PostgreSQL) y actualiza los parámetros en `typeorm.config.ts`.
 
 ¡Disfruta construyendo tu dominio!
