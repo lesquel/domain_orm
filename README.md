@@ -1,5 +1,5 @@
-# ORM Domain Project
 
+<<<<<<< HEAD
 Proyecto base en TypeScript que modela el diagrama entidad–relación del sistema de reservas de restaurantes usando **TypeORM** dentro de una arquitectura limpia (dominio independiente, capa de infraestructura y mapeadores explícitos).
 
 ## Scripts disponibles
@@ -43,3 +43,5 @@ bun run start
 El script de arranque inicializa la conexión SQLite y lista las entidades registradas. Modifica `DB_PATH` si deseas apuntar a otra base (por ejemplo PostgreSQL) y actualiza los parámetros en `typeorm.config.ts`.
 
 ¡Disfruta construyendo tu dominio!
+=======
+>>>>>>> c0dced90eec3477251a188f139458e5fd68b559e

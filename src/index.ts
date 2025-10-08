@@ -1,4 +1,4 @@
-import { AppDataSource } from './infrastructure/config/typeorm.config.js';
+import { AppDataSource } from './infrastructure/config/typeorm.config';
 
 export async function bootstrap(): Promise<void> {
   try {
