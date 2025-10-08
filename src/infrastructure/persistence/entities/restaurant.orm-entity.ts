@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { DishOrmEntity } from './dish.orm-entity.js';
 import { ImageOrmEntity } from './image.orm-entity.js';
@@ -13,19 +14,19 @@ export class RestaurantOrmEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'restaurante_id' })
   id!: string;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   nombre!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   descripcion?: string | null;
 
-  @Column({ length: 200 })
+  @Column('varchar', { length: 200 })
   direccion!: string;
 
-  @Column({ name: 'horario_atencion', length: 100, nullable: true })
+  @Column('varchar', { name: 'horario_atencion', length: 100, nullable: true })
   horarioAtencion?: string | null;
 
-  @Column({ name: 'capacidad_total', type: 'int' })
+  @Column('int', { name: 'capacidad_total' })
   capacidadTotal!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.restaurantes, {
@@ -33,29 +34,29 @@ export class RestaurantOrmEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'imagen_id' })
-  imagen?: ImageOrmEntity | null;
+  imagen?: Relation<ImageOrmEntity> | null;
 
   @OneToMany(() => SectionOrmEntity, (section: SectionOrmEntity) => section.restaurante)
-  secciones!: SectionOrmEntity[];
+  secciones!: Relation<SectionOrmEntity[]>;
 
   @OneToMany(
     () => ReservationOrmEntity,
     (reservation: ReservationOrmEntity) => reservation.restaurante,
   )
-  reservas!: ReservationOrmEntity[];
+  reservas!: Relation<ReservationOrmEntity[]>;
 
   @OneToMany(() => ReviewOrmEntity, (review: ReviewOrmEntity) => review.restaurante)
-  resenas!: ReviewOrmEntity[];
+  resenas!: Relation<ReviewOrmEntity[]>;
 
   @OneToMany(
     () => SubscriptionOrmEntity,
     (subscription: SubscriptionOrmEntity) => subscription.restaurante,
   )
-  suscripciones!: SubscriptionOrmEntity[];
+  suscripciones!: Relation<SubscriptionOrmEntity[]>;
 
   @OneToMany(() => MenuOrmEntity, (menu: MenuOrmEntity) => menu.restaurante)
-  menus!: MenuOrmEntity[];
+  menus!: Relation<MenuOrmEntity[]>;
 
   @OneToMany(() => DishOrmEntity, (dish: DishOrmEntity) => dish.restaurante)
-  platillos!: DishOrmEntity[];
+  platillos!: Relation<DishOrmEntity[]>;
 }

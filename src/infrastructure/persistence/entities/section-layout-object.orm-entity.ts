@@ -1,4 +1,5 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { LayoutObjectOrmEntity } from './layout-object.orm-entity.js';
 import { SectionOrmEntity } from './section.orm-entity.js';
@@ -12,7 +13,7 @@ export class SectionLayoutObjectOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'seccion_id' })
-  seccion!: SectionOrmEntity;
+  seccion!: Relation<SectionOrmEntity>;
 
   @ManyToOne(
     () => LayoutObjectOrmEntity,
@@ -22,5 +23,5 @@ export class SectionLayoutObjectOrmEntity {
     },
   )
   @JoinColumn({ name: 'objeto_id' })
-  objeto!: LayoutObjectOrmEntity;
+  objeto!: Relation<LayoutObjectOrmEntity>;
 }

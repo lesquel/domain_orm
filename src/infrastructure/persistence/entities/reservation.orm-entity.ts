@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { PaymentOrmEntity } from './payment.orm-entity.js';
 import { RestaurantOrmEntity } from './restaurant.orm-entity.js';
@@ -14,35 +15,35 @@ export class ReservationOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'usuario_id' })
-  usuario!: UserOrmEntity;
+  usuario!: Relation<UserOrmEntity>;
 
   @ManyToOne(() => RestaurantOrmEntity, (restaurant: RestaurantOrmEntity) => restaurant.reservas, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @ManyToOne(() => TableOrmEntity, (table: TableOrmEntity) => table.reservaciones, {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'mesa_id' })
-  mesa!: TableOrmEntity;
+  mesa!: Relation<TableOrmEntity>;
 
-  @Column({ name: 'fecha_reserva', type: 'date' })
+  @Column('date', { name: 'fecha_reserva' })
   fechaReserva!: string;
 
-  @Column({ type: 'time' })
+  @Column('time')
   hora!: string;
 
-  @Column({ name: 'cantidad_personas', type: 'int' })
+  @Column('int', { name: 'cantidad_personas' })
   cantidadPersonas!: number;
 
-  @Column({ length: 30 })
+  @Column('varchar', { length: 30 })
   estado!: string;
 
-  @Column({ type: 'varchar', length: 250, nullable: true })
+  @Column('varchar', { length: 250, nullable: true })
   notas?: string | null;
 
   @OneToMany(() => PaymentOrmEntity, (payment: PaymentOrmEntity) => payment.reserva)
-  pagos!: PaymentOrmEntity[];
+  pagos!: Relation<PaymentOrmEntity[]>;
 }

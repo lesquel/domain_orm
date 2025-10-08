@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { ImageOrmEntity } from './image.orm-entity.js';
 import { ReservationOrmEntity } from './reservation.orm-entity.js';
@@ -13,24 +14,24 @@ export class TableOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'seccion_id' })
-  seccion!: SectionOrmEntity;
+  seccion!: Relation<SectionOrmEntity>;
 
-  @Column({ name: 'numero_mesa', type: 'int' })
+  @Column('int', { name: 'numero_mesa' })
   numeroMesa!: number;
 
-  @Column({ type: 'int' })
+  @Column('int')
   capacidad!: number;
 
-  @Column({ name: 'pos_x', type: 'int' })
+  @Column('int', { name: 'pos_x' })
   posX!: number;
 
-  @Column({ name: 'pos_y', type: 'int' })
+  @Column('int', { name: 'pos_y' })
   posY!: number;
 
-  @Column({ name: 'ancho', type: 'int' })
+  @Column('int', { name: 'ancho' })
   ancho!: number;
 
-  @Column({ name: 'alto', type: 'int' })
+  @Column('int', { name: 'alto' })
   alto!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.mesas, {
@@ -38,8 +39,8 @@ export class TableOrmEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'imagen_id' })
-  imagen?: ImageOrmEntity | null;
+  imagen?: Relation<ImageOrmEntity> | null;
 
   @OneToMany(() => ReservationOrmEntity, (reservation: ReservationOrmEntity) => reservation.mesa)
-  reservaciones!: ReservationOrmEntity[];
+  reservaciones!: Relation<ReservationOrmEntity[]>;
 }

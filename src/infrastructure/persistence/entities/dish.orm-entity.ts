@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 
 import { ImageOrmEntity } from './image.orm-entity.js';
 import { MenuOrmEntity } from './menu.orm-entity.js';
@@ -13,21 +14,21 @@ export class DishOrmEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'restaurante_id' })
-  restaurante!: RestaurantOrmEntity;
+  restaurante!: Relation<RestaurantOrmEntity>;
 
   @ManyToOne(() => MenuOrmEntity, (menu: MenuOrmEntity) => menu.platillos, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'menu_id' })
-  menu!: MenuOrmEntity;
+  menu!: Relation<MenuOrmEntity>;
 
-  @Column({ length: 100 })
+  @Column('varchar', { length: 100 })
   nombre!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column('text', { nullable: true })
   descripcion?: string | null;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
   precio!: number;
 
   @ManyToOne(() => ImageOrmEntity, (image: ImageOrmEntity) => image.platillos, {
@@ -35,5 +36,5 @@ export class DishOrmEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'imagen_id' })
-  imagen?: ImageOrmEntity | null;
+  imagen?: Relation<ImageOrmEntity> | null;
 }
