@@ -442,7 +442,7 @@ export class MenuMapper {
 }
 
 export class DishMapper {
-  static toDomain(entity: DishOrmEntity, options: MapperOptions = {}): Dish {
+  static toDomain(entity: DishOrmEntity, _options: MapperOptions = {}): Dish {
     const domain: Dish = {
       id: entity.id,
       restaurant: RestaurantMapper.toDomain(entity.restaurante),
